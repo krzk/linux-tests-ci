@@ -16,18 +16,18 @@ jobs:
       contents: read
 
     steps:
-    - name: Install additional packages
-      run: |
-        sudo apt update
-        sudo apt install -y --no-install-recommends build-essential python3-pip libyaml-dev
-        pip install dtschema yamllint
-
     - name: Git checkout Linux sources
       uses: actions/checkout@v2
       with:
         repository: krzk/linux.git
         ref: track/next
         path: sources
+
+    - name: Install additional packages
+      run: |
+        sudo apt update
+        sudo apt install -y --no-install-recommends build-essential python3-pip libyaml-dev
+        pip install dtschema yamllint
 
     - name: Make allyesconfig
       run: make allyesconfig
@@ -92,17 +92,17 @@ jobs:
     - name: Git checkout
       uses: actions/checkout@v2
 
-    - name: Install additional packages
-      run: |
-        ./bin/install.ubuntu.sh
-        pip install dtschema yamllint
-
     - name: Git checkout Linux sources
       uses: actions/checkout@v2
       with:
         repository: krzk/linux.git
         ref: track/next
         path: sources
+
+    - name: Install additional packages
+      run: |
+        ./bin/install.ubuntu.sh
+        pip install dtschema yamllint
 
     - name: Make config
       run: make ${{ matrix.config }}
