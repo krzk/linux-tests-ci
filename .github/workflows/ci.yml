@@ -36,12 +36,19 @@ jobs:
     - name: Make dt_binding_check
       id: make_dt_binding_check
       run: |
-        make -j$(nproc) dt_binding_check | tee ../log-dt_binding_check
+        (make -j$(nproc) dt_binding_check | tee ../log-dt_binding_check-stdout.log) \
+          3>&1 1>&2 2>&3 | tee ../log-dt_binding_check-stderr.log
       working-directory: ./sources
 
-    - name: Look for warnings in dt_binding_check
+    - name: Look for warnings in dt_binding_check stdout
       run: |
-        grep -C 1 -P '^[^\s]+:\s' log-dt_binding_check
+        grep -C 1 -P '^[^\s]+:\s' log-dt_binding_check-stdout.log
+      if: ${{ always() && ((steps.make_dt_binding_check.outcome == 'failure') ||
+                           (steps.make_dt_binding_check.outcome == 'success')) }}
+
+    - name: Print dt_binding_check stderr
+      run: |
+        cat log-dt_binding_check-stderr.log
       if: ${{ always() && ((steps.make_dt_binding_check.outcome == 'failure') ||
                            (steps.make_dt_binding_check.outcome == 'success')) }}
 
