@@ -36,7 +36,6 @@ jobs:
     - name: Make dt_binding_check
       id: make_dt_binding_check
       run: |
-        echo "" > ../log-dt_binding_check
         make -j$(nproc) dt_binding_check | tee ../log-dt_binding_check
       working-directory: ./sources
 
