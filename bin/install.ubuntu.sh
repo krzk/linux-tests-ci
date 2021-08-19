@@ -20,6 +20,7 @@ case "$ARCH" in
 	arm64) PKGS_CC="gcc-aarch64-linux-gnu";;
 	mips) PKGS_CC="gcc-${CROSS_COMPILE%-}";;
 	powerpc) PKGS_CC="gcc-powerpc-linux-gnu";;
+	riscv) PKGS_CC="gcc-riscv64-linux-gnu";;
 	*) echo "unsupported arch: '$ARCH'!" >&2; exit 1;;
 esac
 

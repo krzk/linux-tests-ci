@@ -81,6 +81,10 @@ jobs:
             env:
               ARCH: powerpc
               CROSS_COMPILE: powerpc-linux-gnu-
+          - config: allyesconfig
+            env:
+              ARCH: riscv
+              CROSS_COMPILE: riscv64-linux-gnu-
 
     env: ${{ matrix.env }}
 
