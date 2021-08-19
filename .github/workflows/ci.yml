@@ -8,8 +8,8 @@ name: Linux kernel dtschema
 on: [push, pull_request]
 
 jobs:
-  job:
-    name: Check Linux kernel dtschema
+  job_dt_binding_check:
+    name: dt_binding_check
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -20,8 +20,6 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y --no-install-recommends build-essential python3-pip libyaml-dev
-        sudo apt install -y --no-install-recommends gcc-arm-linux-gnueabi
-        sudo apt install -y --no-install-recommends gcc-aarch64-linux-gnu
         pip install dtschema yamllint
 
     - name: Git checkout
@@ -44,6 +42,29 @@ jobs:
     - name: Look for warnings in dt_binding_check
       run: |
         grep -C 1 -P '^[^ \t]+: ' log-dt_binding_check
+
+  job_dtbs_check:
+    name: dtbs_check
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+    - name: Install additional packages
+      run: |
+        sudo apt update
+        sudo apt install -y --no-install-recommends build-essential python3-pip libyaml-dev
+        sudo apt install -y --no-install-recommends gcc-arm-linux-gnueabi
+        sudo apt install -y --no-install-recommends gcc-aarch64-linux-gnu
+        pip install dtschema yamllint
+
+    - name: Git checkout
+      uses: actions/checkout@v2
+      with:
+        repository: krzk/linux.git
+        ref: track/next
+        path: sources
 
     - name: Make allyesconfig (arm)
       run: CROSS_COMPILE="arm-linux-gnueabi-" ARCH=arm make allyesconfig
