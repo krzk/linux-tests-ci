@@ -1,0 +1,46 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Copyright (c) 2021 Canonical Ltd.
+# Author: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+#                             <krzk@kernel.org>
+
+name: Linux kernel dtschema
+on: [push, pull_request]
+
+jobs:
+  job:
+    name: Check Linux kernel dtschema
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+    - name: Install additional packages
+      run: |
+        sudo apt update
+        sudo apt install -y --no-install-recommends build-essential python3-pip libyaml-dev
+        sudo apt install -y --no-install-recommends gcc-arm-linux-gnueabi
+        sudo apt install -y --no-install-recommends gcc-aarch64-linux-gnu
+        pip install dtschema yamllint
+
+    - name: Git checkout
+      uses: actions/checkout@v2
+      with:
+        repository: krzk/linux.git
+        ref: track/next
+        path: sources
+
+    - name: Make allyesconfig
+      run: make allyesconfig
+      working-directory: ./sources
+
+    - name: Make dt_binding_check
+      run: |
+        echo "" > ../log-dt_binding_check
+        make -j$(nproc) dt_binding_check | tee ../log-dt_binding_check
+      working-directory: ./sources
+
+    - name: Look for warnings in dt_binding_check
+      run: |
+        grep -C 1 -P '^[^ \t]+: ' log-dt_binding_check
