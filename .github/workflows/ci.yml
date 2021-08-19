@@ -34,6 +34,7 @@ jobs:
       working-directory: ./sources
 
     - name: Make dt_binding_check
+      id: make_dt_binding_check
       run: |
         echo "" > ../log-dt_binding_check
         make -j$(nproc) dt_binding_check | tee ../log-dt_binding_check
@@ -42,6 +43,8 @@ jobs:
     - name: Look for warnings in dt_binding_check
       run: |
         grep -C 1 -P '^[^ \t]+: ' log-dt_binding_check
+      if: ${{ always() && ((steps.make_dt_binding_check.outcome == 'failure') ||
+                           (steps.make_dt_binding_check.outcome == 'success')) }}
 
   job_dtbs_check:
     name: dtbs_check
