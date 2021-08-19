@@ -44,3 +44,19 @@ jobs:
     - name: Look for warnings in dt_binding_check
       run: |
         grep -C 1 -P '^[^ \t]+: ' log-dt_binding_check
+
+    - name: Make allyesconfig (arm)
+      run: CROSS_COMPILE="arm-linux-gnueabi-" ARCH=arm make allyesconfig
+      working-directory: ./sources
+
+    - name: Make dtbs_check (arm)
+      run: CROSS_COMPILE="arm-linux-gnueabi-" ARCH=arm make -j$(nproc) dtbs_check
+      working-directory: ./sources
+
+    - name: Make allyesconfig (arm64)
+      run: CROSS_COMPILE="aarch64-linux-gnu-" ARCH=arm64 make allyesconfig
+      working-directory: ./sources
+
+    - name: Make dtbs_check (arm64)
+      run: CROSS_COMPILE="aarch64-linux-gnu-" ARCH=arm64 make -j$(nproc) dtbs_check
+      working-directory: ./sources
