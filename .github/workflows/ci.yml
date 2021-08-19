@@ -22,7 +22,7 @@ jobs:
         sudo apt install -y --no-install-recommends build-essential python3-pip libyaml-dev
         pip install dtschema yamllint
 
-    - name: Git checkout
+    - name: Git checkout Linux sources
       uses: actions/checkout@v2
       with:
         repository: krzk/linux.git
@@ -73,19 +73,27 @@ jobs:
             env:
               ARCH: arm64
               CROSS_COMPILE: aarch64-linux-gnu-
+          - config: allyesconfig
+            env:
+              ARCH: mips
+              CROSS_COMPILE: mips-linux-gnu-
+          - config: allyesconfig
+            env:
+              ARCH: powerpc
+              CROSS_COMPILE: powerpc-linux-gnu-
 
     env: ${{ matrix.env }}
 
     steps:
+    - name: Git checkout
+      uses: actions/checkout@v2
+
     - name: Install additional packages
       run: |
-        sudo apt update
-        sudo apt install -y --no-install-recommends build-essential python3-pip libyaml-dev
-        sudo apt install -y --no-install-recommends gcc-arm-linux-gnueabi
-        sudo apt install -y --no-install-recommends gcc-aarch64-linux-gnu
+        ./bin/install.ubuntu.sh
         pip install dtschema yamllint
 
-    - name: Git checkout
+    - name: Git checkout Linux sources
       uses: actions/checkout@v2
       with:
         repository: krzk/linux.git
