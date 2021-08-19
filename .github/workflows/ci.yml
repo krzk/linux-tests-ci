@@ -57,10 +57,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - env:
+          - config: allyesconfig
+            env:
               ARCH: arm
               CROSS_COMPILE: arm-linux-gnueabi-
-          - env:
+          - config: multi_v4t_defconfig
+            env:
+              ARCH: arm
+              CROSS_COMPILE: arm-linux-gnueabi-
+          - config: multi_v5_defconfig
+            env:
+              ARCH: arm
+              CROSS_COMPILE: arm-linux-gnueabi-
+          - config: allyesconfig
+            env:
               ARCH: arm64
               CROSS_COMPILE: aarch64-linux-gnu-
 
@@ -82,8 +92,8 @@ jobs:
         ref: track/next
         path: sources
 
-    - name: Make allyesconfig
-      run: make allyesconfig
+    - name: Make config
+      run: make ${{ matrix.config }}
       working-directory: ./sources
 
     - name: Make dtbs_check
