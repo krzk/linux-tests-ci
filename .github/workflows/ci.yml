@@ -50,6 +50,19 @@ jobs:
       actions: read
       contents: read
 
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - env:
+              ARCH: arm
+              CROSS_COMPILE: arm-linux-gnueabi-
+          - env:
+              ARCH: arm64
+              CROSS_COMPILE: aarch64-linux-gnu-
+
+    env: ${{ matrix.env }}
+
     steps:
     - name: Install additional packages
       run: |
@@ -66,18 +79,10 @@ jobs:
         ref: track/next
         path: sources
 
-    - name: Make allyesconfig (arm)
-      run: CROSS_COMPILE="arm-linux-gnueabi-" ARCH=arm make allyesconfig
+    - name: Make allyesconfig
+      run: make allyesconfig
       working-directory: ./sources
 
-    - name: Make dtbs_check (arm)
-      run: CROSS_COMPILE="arm-linux-gnueabi-" ARCH=arm make -j$(nproc) dtbs_check
-      working-directory: ./sources
-
-    - name: Make allyesconfig (arm64)
-      run: CROSS_COMPILE="aarch64-linux-gnu-" ARCH=arm64 make allyesconfig
-      working-directory: ./sources
-
-    - name: Make dtbs_check (arm64)
-      run: CROSS_COMPILE="aarch64-linux-gnu-" ARCH=arm64 make -j$(nproc) dtbs_check
+    - name: Make dtbs_check
+      run: make -j$(nproc) dtbs_check
       working-directory: ./sources
