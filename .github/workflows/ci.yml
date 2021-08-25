@@ -42,7 +42,7 @@ jobs:
 
     - name: Look for warnings in dt_binding_check stdout
       run: |
-        grep -C 1 -P '^[^\s]+:\s' log-dt_binding_check-stdout.log
+        grep -C 1 -P '^[^\s]+:\s' log-dt_binding_check-stdout.log || true
       if: ${{ always() && ((steps.make_dt_binding_check.outcome == 'failure') ||
                            (steps.make_dt_binding_check.outcome == 'success')) }}
 
