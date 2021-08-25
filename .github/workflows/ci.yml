@@ -5,7 +5,7 @@
 #                             <krzk@kernel.org>
 
 name: Linux kernel dtschema
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   job_dt_binding_check:
