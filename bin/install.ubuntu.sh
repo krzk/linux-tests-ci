@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 # Copyright (c) 2021 Canonical Ltd.
-# Author: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-#                             <krzk@kernel.org>
+# Copyright (c) 2022 Krzysztof Kozlowski
+# Author: Krzysztof Kozlowski <krzk@kernel.org>
 #
 
 set -ex
